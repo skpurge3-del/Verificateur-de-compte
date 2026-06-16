@@ -1,385 +1,505 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyse de Numéro - WhatsApp Business</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
-        body {
-            background: linear-gradient(145deg, #10141c 0%, #1a1f2a 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
-        }
-        .card {
-            background: rgba(18, 22, 32, 0.9);
-            backdrop-filter: blur(2px);
-            border-radius: 48px;
-            max-width: 550px;
-            width: 100%;
-            padding: 28px 30px 38px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.5), 0 0 0 1px rgba(72, 187, 120, 0.15);
-            transition: all 0.2s;
-        }
-        h1 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            margin: 0 0 6px 0;
-            color: #eef2ff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        h1 small {
-            font-size: 0.75rem;
-            font-weight: normal;
-            background: #2d3748;
-            padding: 2px 10px;
-            border-radius: 40px;
-            color: #a0f0c0;
-        }
-        .sub {
-            color: #8e9aaf;
-            border-left: 3px solid #34d399;
-            padding-left: 12px;
-            margin: 8px 0 20px 0;
-            font-size: 0.85rem;
-        }
-        .input-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 28px;
-        }
-        input {
-            flex: 2;
-            background: #0b0e16;
-            border: 1px solid #2a3448;
-            padding: 14px 18px;
-            border-radius: 60px;
-            font-size: 1rem;
-            color: white;
-            outline: none;
-            transition: 0.2s;
-        }
-        input:focus {
-            border-color: #34d399;
-            box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.3);
-        }
-        button {
-            background: #34d399;
-            border: none;
-            padding: 0 28px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            color: #0a0f1a;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 10px rgba(52, 211, 153, 0.2);
-        }
-        button:hover {
-            background: #2ebd87;
-            transform: scale(0.97);
-        }
-        .result {
-            background: #0f131ecc;
-            border-radius: 32px;
-            padding: 20px;
-            margin-top: 15px;
-            border: 1px solid #2c354a;
-        }
-        .numero {
-            font-size: 1.3rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            background: #00000055;
-            display: inline-block;
-            padding: 6px 18px;
-            border-radius: 60px;
-            margin-bottom: 18px;
-            color: #cbd5ff;
-        }
-        .solidite {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            border-bottom: 2px dashed #2a3440;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-        }
-        .pourcentage {
-            font-size: 2.6rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #c0f0d0, #34d399);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .badge {
-            background: #1e2a2f;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        .grid-metrics {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin: 20px 0;
-        }
-        .metric {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .metric span:first-child {
-            color: #b9c3e6;
-            font-size: 0.85rem;
-        }
-        .bar-bg {
-            width: 200px;
-            height: 8px;
-            background: #202433;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .bar-fill {
-            height: 100%;
-            background: #34d399;
-            width: 0%;
-            border-radius: 10px;
-        }
-        .value {
-            font-weight: 600;
-            min-width: 45px;
-            text-align: right;
-            color: #e2e8ff;
-        }
-        .warning {
-            background: #2a2118;
-            border-left: 4px solid #fbbf24;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #fdebb3;
-        }
-        footer {
-            text-align: center;
-            font-size: 0.7rem;
-            margin-top: 28px;
-            color: #56607c;
-        }
-        .creator-credit {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 0.75rem;
-            color: #7c86a3;
-            font-style: italic;
-            letter-spacing: 0.3px;
-        }
-        .creator-credit span {
-            background: linear-gradient(135deg, #34d399, #a0f0c0);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            font-weight: 600;
-        }
-        @media (max-width: 500px) {
-            .card { padding: 20px; }
-            .bar-bg { width: 130px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>WA Business Analyse Pro | Indice de solidité</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 10%, #1a1f2e, #0b0e14);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+    }
+
+    /* carte principale avec effet verre & néon subtil */
+    .glass-card {
+      max-width: 620px;
+      width: 100%;
+      background: rgba(14, 19, 31, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 2.8rem;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      box-shadow: 0 35px 55px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(74, 222, 128, 0.15), 0 0 25px rgba(74, 222, 128, 0.08);
+      padding: 1.8rem 2rem 2.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 0.4rem;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #e9f5ec, #b8f0cf);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pro {
+      background: #1e293b;
+      padding: 0.25rem 1rem;
+      border-radius: 60px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #86efac;
+      border: 0.5px solid #4ade8080;
+      letter-spacing: 0.4px;
+    }
+
+    .sub-line {
+      color: #b9c2e0;
+      font-size: 0.88rem;
+      border-left: 4px solid #4ade80;
+      padding-left: 14px;
+      margin: 14px 0 24px 0;
+      font-weight: 450;
+      opacity: 0.9;
+    }
+
+    .search-area {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+
+    .input-wrapper {
+      flex: 2;
+      position: relative;
+    }
+
+    #phoneInput {
+      width: 100%;
+      background: #0b0f17;
+      border: 1.8px solid #2d3648;
+      padding: 14px 20px;
+      border-radius: 80px;
+      font-size: 1rem;
+      color: #f1f5f9;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.25s;
+      letter-spacing: 0.3px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+    }
+
+    #phoneInput:focus {
+      border-color: #4ade80;
+      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.3), inset 0 1px 8px rgba(0,0,0,0.5);
+      background: #0c101b;
+    }
+
+    button {
+      background: linear-gradient(115deg, #2dd4bf, #22c55e);
+      border: none;
+      padding: 0 32px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #082f1e;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.5, 1.1);
+      box-shadow: 0 8px 18px rgba(34, 197, 94, 0.35);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      background-size: 150% 100%;
+      background-position: left;
+    }
+
+    button:hover {
+      background: linear-gradient(115deg, #20b89a, #16a34a);
+      transform: scale(0.96);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    /* panneau résultats */
+    .result-panel {
+      background: rgba(3, 7, 15, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 2.2rem;
+      padding: 1.4rem 1.6rem;
+      margin-top: 6px;
+      border: 1px solid #2e3b4f;
+      transition: 0.25s;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.4);
+    }
+
+    .numero-highlight {
+      background: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.5rem 1.3rem;
+      border-radius: 80px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e0e7ff;
+      margin-bottom: 1.2rem;
+      border: 1px solid #4ade8040;
+      backdrop-filter: blur(4px);
+    }
+
+    .solidite-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 1px dashed #38445c;
+      padding-bottom: 0.9rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .solidite-value {
+      font-size: 2.9rem;
+      font-weight: 800;
+      background: linear-gradient(145deg, #d9fce9, #86efac);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      line-height: 1;
+    }
+
+    .risk-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 1.1rem;
+      border-radius: 30px;
+      background: #1f2537;
+      backdrop-filter: blur(4px);
+    }
+
+    .analyse-date {
+      font-size: 0.7rem;
+      color: #90a0cc;
+      margin-top: -6px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.3rem 0 1.4rem;
+    }
+
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .metric-label {
+      flex: 1;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: #cdd5f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bar-container {
+      flex: 2;
+      min-width: 130px;
+      background: #1e2533;
+      border-radius: 20px;
+      height: 8px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    }
+
+    .bar-progress {
+      height: 100%;
+      width: 0%;
+      border-radius: 20px;
+      transition: width 0.35s ease;
+    }
+
+    .metric-percent {
+      min-width: 45px;
+      text-align: right;
+      font-weight: 700;
+      color: #e2e8ff;
+      font-size: 0.85rem;
+    }
+
+    .warning-note {
+      background: #1e2332;
+      border-radius: 1.3rem;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.78rem;
+      border-left: 5px solid #facc15;
+      margin-top: 20px;
+      color: #f5eacc;
+      line-height: 1.4;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.68rem;
+      color: #5f6e94;
+      margin-top: 22px;
+      border-top: 1px solid #2b344a;
+      padding-top: 18px;
+      letter-spacing: 0.2px;
+    }
+
+    .creator {
+      text-align: center;
+      font-size: 0.72rem;
+      margin-top: 12px;
+      font-weight: 400;
+      background: linear-gradient(135deg, #b3ebcf, #86efac);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    @media (max-width: 500px) {
+      .glass-card { padding: 1.5rem; }
+      .metric-label { flex: 0.9; }
+      .bar-container { flex: 1.2; }
+      .solidite-value { font-size: 2.3rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-    <h1>📊 WA Business <small>analyse pro</small></h1>
-    <div class="sub">🔍 Vérification intelligente · Indice de solidité</div>
+<div class="glass-card">
+  <div class="brand">
+    <h1>
+      📊 WA Business
+      <span class="badge-pro">analyse pro</span>
+    </h1>
+    <div style="opacity:0.8; filter: drop-shadow(0 0 6px #4ade80);">🔍</div>
+  </div>
+  <div class="sub-line">
+    Vérification intelligente · Indice de solidité
+  </div>
 
-    <div class="input-group">
-        <input type="tel" id="phoneInput" placeholder="Ex: +2250546384306 ou 0546384306" value="+2250546384306">
-        <button id="analyzeBtn">Analyser</button>
+  <div class="search-area">
+    <div class="input-wrapper">
+      <input type="tel" id="phoneInput" placeholder="Ex: +2250546384306 ou 0546384306" autocomplete="off">
     </div>
+    <button id="analyzeBtn">Analyser</button>
+  </div>
 
-    <div id="resultArea" class="result">
-        <!-- contenu dynamique -->
-        <div style="text-align:center; color:#7c86a3;">🔎 Entrez un numéro et cliquez sur Analyser</div>
-    </div>
-    <footer>✅ Simulation basée sur des heuristiques réalistes (activité, ancienneté, signalements, fiabilité réseau)</footer>
-    <div class="creator-credit">✨ Créé par <span>dev 𝑪𝒊𝒇𝒆𝒓</span></div>
+  <div id="resultContainer" class="result-panel">
+    <div style="text-align:center; padding: 22px 0; color:#8899cc;">✨ Entrez un numéro et cliquez sur Analyser</div>
+  </div>
+
+  <div class="footer-note">
+    🔎 Simulation intelligente basée sur comportement réseau, signalements & ancienneté
+  </div>
+  <div class="creator">
+    ⚡ dev 𝑪𝒊𝒇𝒆𝒓 — design pro
+  </div>
 </div>
 
 <script>
-    // Fonction pour générer des métriques cohérentes mais "réalistes" selon le numéro (simulation)
-    // Le but : chaque numéro aura un profil unique basé sur son pattern + indicatif + longueur
-    function genererAnalyse(numeroRaw) {
-        // Nettoyer le numéro
-        let numero = numeroRaw.replace(/\s/g, '');
-        if (!numero.startsWith('+')) {
-            // si pas d'indicatif, on suppose +225 par défaut (Côte d'Ivoire)
-            if (/^0?[0-9]{8,9}$/.test(numero)) {
-                numero = '+225' + numero.replace(/^0+/, '');
-            } else {
-                numero = '+' + numero.replace(/^\+/, '');
-            }
-        }
-        
-        // Seed basé sur les chiffres pour générer des résultats cohérents mais variés
-        let hash = 0;
-        for (let i = 0; i < numero.length; i++) {
-            hash = ((hash << 5) - hash) + numero.charCodeAt(i);
-            hash |= 0;
-        }
-        // valeur pseudo-aléatoire déterministe entre 0 et 1
-        let seed = Math.abs(hash % 1000) / 1000;
-        
-        // Tendance de base : l'indicatif influence (+225 bonne réputation)
-        let reputationBase = 0.70;
-        if (numero.includes('+225')) reputationBase = 0.78;
-        if (numero.includes('+33')) reputationBase = 0.82;
-        if (numero.includes('+1')) reputationBase = 0.75;
-        if (numero.includes('+44')) reputationBase = 0.80;
-        
-        // Générer 4 métriques avec cohérence
-        let activite = 0.45 + (seed * 0.5);
-        let anciennete = 0.30 + (Math.sin(seed * 15) * 0.3 + 0.4);
-        let fiabiliteReseau = 0.65 + (reputationBase * 0.25) + (Math.cos(seed * 7) * 0.08);
-        let signalement = 0.20 + (seed * 0.7);
-        
-        // on bride et on évite les extrêmes trop faibles / hauts pour rendre réaliste
-        activite = Math.min(0.94, Math.max(0.28, activite));
-        anciennete = Math.min(0.92, Math.max(0.20, anciennete));
-        fiabiliteReseau = Math.min(0.96, Math.max(0.55, fiabiliteReseau));
-        signalement = Math.min(0.85, Math.max(0.12, signalement));
-        
-        // Indice de solidité = moyenne pondérée (coeff: activite 30%, anciennete 25%, fiabilité 30%, signalement inverse 15%)
-        let solidite = (activite * 0.30) + (anciennete * 0.25) + (fiabiliteReseau * 0.30) + ((1 - signalement) * 0.15);
-        solidite = Math.min(0.98, Math.max(0.45, solidite));
-        let soliditePercent = Math.round(solidite * 100);
-        
-        // texte de statut personnalisé
-        let statutMessage = "";
-        let couleurSolidite = "";
-        if (soliditePercent >= 80) {
-            statutMessage = "✔️ COMPTE SÉCURISÉ – Très bonne fiabilité";
-            couleurSolidite = "#34d399";
-        } else if (soliditePercent >= 65) {
-            statutMessage = "⚠️ COMPTE SÉCURISÉ – Surveillance recommandée";
-            couleurSolidite = "#fbbf24";
+  (function() {
+    // normalisation avancée du numéro
+    function normaliserNumero(raw) {
+      let cleaned = raw.trim().replace(/\s+/g, '');
+      if (cleaned === "") return "";
+      if (!cleaned.startsWith('+')) {
+        if (cleaned.startsWith('00')) {
+          cleaned = '+' + cleaned.slice(2);
+        } else if (cleaned.startsWith('0') && cleaned.length >= 9) {
+          cleaned = '+225' + cleaned.slice(1);
+        } else if (/^[0-9]{8,12}$/.test(cleaned)) {
+          cleaned = '+225' + cleaned;
         } else {
-            statutMessage = "❓ COMPTE À RISQUE – Vérification nécessaire";
-            couleurSolidite = "#f9736b";
+          cleaned = '+' + cleaned;
         }
-        
-        // formater les métriques en %
-        let activitePercent = Math.round(activite * 100);
-        let anciennetePercent = Math.round(anciennete * 100);
-        let fiabilitePercent = Math.round(fiabiliteReseau * 100);
-        let signalementPercent = Math.round(signalement * 100);
-        
-        // date fictive "analyse du jour"
-        let today = new Date();
-        let dateStr = today.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + " " + today.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-        
-        return {
-            numero: numero,
-            dateAnalyse: dateStr,
-            solidite: soliditePercent,
-            activite: activitePercent,
-            anciennete: anciennetePercent,
-            fiabilite: fiabilitePercent,
-            signalement: signalementPercent,
-            statut: statutMessage,
-            couleurStatut: couleurSolidite
-        };
+      }
+      return cleaned;
     }
-    
-    function afficherAnalyse(data) {
-        let html = `
-            <div class="numero">📞 ${data.numero}</div>
-            <div class="solidite">
-                <div>
-                    <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">INDICE DE SOLIDITÉ</div>
-                    <div class="pourcentage">${data.solidite}%</div>
-                </div>
-                <div class="badge" style="background:${data.couleurStatut}20; color:${data.couleurStatut}; border:1px solid ${data.couleurStatut}50;">
-                    ${data.statut.includes("SURVEILLANCE") ? "🔍" : (data.solidite>=80 ? "🛡️" : "⚠️")} ${data.statut}
-                </div>
-            </div>
-            <div style="font-size:0.7rem; color:#b9c3e6; margin-top:-8px; margin-bottom:10px;">Analysé le ${data.dateAnalyse}</div>
-            
-            <div class="grid-metrics">
-                <div class="metric">
-                    <span>📱 Activité récente</span>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div class="bar-bg"><div class="bar-fill" style="width:${data.activite}%;"></div></div>
-                        <span class="value">${data.activite}%</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <span>📅 Ancienneté du compte</span>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div class="bar-bg"><div class="bar-fill" style="width:${data.anciennete}%;"></div></div>
-                        <span class="value">${data.anciennete}%</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <span>🌐 Fiabilité réseau</span>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div class="bar-bg"><div class="bar-fill" style="width:${data.fiabilite}%;"></div></div>
-                        <span class="value">${data.fiabilite}%</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <span>🚨 Indice de signalement</span>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div class="bar-bg"><div class="bar-fill" style="width:${data.signalement}%; background:#f9736b;"></div></div>
-                        <span class="value">${data.signalement}%</span>
-                    </div>
-                </div>
-            </div>
-            <div class="warning">
-                💡 ${data.solidite >= 80 ? "Ce numéro présente un excellent indice de solidité. Peu de signalements récents." : 
-                    (data.solidite >= 65 ? "Ce numéro présente un bon indice de solidité. Surveillance recommandée sur les échanges sensibles." : 
-                    "Soyez vigilant : plusieurs indicateurs suggèrent une activité suspecte ou un compte récent.")}
-            </div>
-        `;
-        document.getElementById('resultArea').innerHTML = html;
+
+    function hashNumber(numero) {
+      let h = 0;
+      for (let i = 0; i < numero.length; i++) {
+        h = ((h << 5) - h) + numero.charCodeAt(i);
+        h |= 0;
+      }
+      return Math.abs(h);
     }
-    
-    // EVENEMENT
-    const btn = document.getElementById('analyzeBtn');
-    const inputField = document.getElementById('phoneInput');
-    
-    function runAnalysis() {
-        let rawNumber = inputField.value.trim();
-        if (rawNumber === "") {
-            document.getElementById('resultArea').innerHTML = `<div style="text-align:center; color:#f9736b;">❌ Veuillez entrer un numéro de téléphone</div>`;
-            return;
-        }
-        const analyseData = genererAnalyse(rawNumber);
-        afficherAnalyse(analyseData);
+
+    function analyserNumero(numeroComplet) {
+      const numero = numeroComplet;
+      const hashVal = hashNumber(numero);
+      let seed = (hashVal % 997) / 997.0;
+
+      let baseReputation = 0.68;
+      if (numero.includes('+225')) baseReputation = 0.78;
+      if (numero.includes('+33')) baseReputation = 0.85;
+      if (numero.includes('+1')) baseReputation = 0.75;
+      if (numero.includes('+44')) baseReputation = 0.82;
+      if (numero.includes('+223')) baseReputation = 0.71;
+      if (numero.includes('+221')) baseReputation = 0.72;
+
+      let activiteRaw = 0.44 + (seed * 0.56);
+      let lastDigit = parseInt(numero.slice(-1)) || 0;
+      activiteRaw += (lastDigit % 5) * 0.025;
+      activiteRaw = Math.min(0.94, Math.max(0.33, activiteRaw));
+
+      let ancienneteRaw = 0.3 + (Math.sin(seed * 13) * 0.34) + (seed * 0.21);
+      ancienneteRaw = Math.min(0.93, Math.max(0.24, ancienneteRaw));
+
+      let fiabiliteRaw = baseReputation + (seed * 0.19) - (lastDigit * 0.006);
+      fiabiliteRaw = Math.min(0.97, Math.max(0.57, fiabiliteRaw));
+
+      let signalementRaw = 0.14 + (seed * 0.77);
+      if (/(\d)\1{2,}/.test(numero)) signalementRaw += 0.1;
+      signalementRaw = Math.min(0.88, Math.max(0.10, signalementRaw));
+
+      let solidite = (activiteRaw * 0.3) + (ancienneteRaw * 0.25) + (fiabiliteRaw * 0.32) + ((1 - signalementRaw) * 0.13);
+      solidite = Math.min(0.97, Math.max(0.45, solidite));
+      let soliditePercent = Math.round(solidite * 100);
+
+      let statutMsg = "";
+      let statusColor = "#f9736b";
+      let riskIcon = "⚠️";
+      if (soliditePercent >= 80) {
+        statutMsg = "🛡️ COMPTE FIABLE – Très bonne réputation";
+        statusColor = "#4ade80";
+        riskIcon = "✅";
+      } else if (soliditePercent >= 64) {
+        statutMsg = "🔍 COMPTE MODÉRÉ – Surveillance recommandée";
+        statusColor = "#facc15";
+        riskIcon = "⚠️";
+      } else {
+        statutMsg = "❌ COMPTE À RISQUE – Vérification nécessaire";
+        statusColor = "#f9736b";
+        riskIcon = "⚠️";
+      }
+
+      let activitePct = Math.round(activiteRaw * 100);
+      let anciennetePct = Math.round(ancienneteRaw * 100);
+      let fiabilitePct = Math.round(fiabiliteRaw * 100);
+      let signalementPct = Math.round(signalementRaw * 100);
+
+      const now = new Date();
+      const dateAnalyse = now.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+          " " + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      let warningMessage = (soliditePercent < 65)
+          ? "Soyez vigilant : plusieurs indicateurs suggèrent une activité suspecte ou un compte récent."
+          : (soliditePercent >= 80 ? "Numéro sécurisé, faible indice de signalement et bonne ancienneté réseau."
+              : "Quelques signaux modérés : prudence conseillée lors d'échanges sensibles.");
+
+      return {
+        numero, solidite: soliditePercent, activite: activitePct, anciennete: anciennetePct,
+        fiabilite: fiabilitePct, signalement: signalementPct, statutTexte: statutMsg,
+        statutCouleur: statusColor, risqueIcon: riskIcon, dateAnalyse, warningMessage
+      };
     }
-    
-    btn.addEventListener('click', runAnalysis);
-    inputField.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') runAnalysis();
+
+    function afficherResultats(data) {
+      const container = document.getElementById('resultContainer');
+      const activiteColor = data.activite >= 65 ? '#4ade80' : (data.activite >= 45 ? '#facc15' : '#f9736b');
+      const ancienneteColor = data.anciennete >= 60 ? '#4ade80' : (data.anciennete >= 40 ? '#facc15' : '#f9736b');
+      const fiabiliteColor = data.fiabilite >= 70 ? '#4ade80' : (data.fiabilite >= 55 ? '#facc15' : '#f9736b');
+      const signalementColor = data.signalement > 55 ? '#f9736b' : (data.signalement > 35 ? '#facc15' : '#4ade80');
+
+      const html = `
+        <div class="numero-highlight">📞 ${data.numero}</div>
+        <div class="solidite-row">
+          <div>
+            <div style="font-size:0.7rem; letter-spacing:0.8px; color:#9fb3dd;">INDICE DE SOLIDITÉ</div>
+            <div class="solidite-value">${data.solidite}%</div>
+          </div>
+          <div class="risk-tag" style="background:${data.statutCouleur}15; border:1px solid ${data.statutCouleur}70; color:${data.statutCouleur};">
+            ${data.risqueIcon} ${data.statutTexte}
+          </div>
+        </div>
+        <div class="analyse-date">📅 Analyse le ${data.dateAnalyse}</div>
+        <div class="metrics">
+          <div class="metric-item">
+            <div class="metric-label"><span>📱</span> Act. récente</div>
+            <div class="bar-container"><div class="bar-progress" style="width: ${data.activite}%; background: ${activiteColor};"></div></div>
+            <div class="metric-percent">${data.activite}%</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-label"><span>📅</span> Ancienneté</div>
+            <div class="bar-container"><div class="bar-progress" style="width: ${data.anciennete}%; background: ${ancienneteColor};"></div></div>
+            <div class="metric-percent">${data.anciennete}%</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-label"><span>🌐</span> Fiabilité réseau</div>
+            <div class="bar-container"><div class="bar-progress" style="width: ${data.fiabilite}%; background: ${fiabiliteColor};"></div></div>
+            <div class="metric-percent">${data.fiabilite}%</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-label"><span>🚨</span> Signalement</div>
+            <div class="bar-container"><div class="bar-progress" style="width: ${data.signalement}%; background: ${signalementColor};"></div></div>
+            <div class="metric-percent">${data.signalement}%</div>
+          </div>
+        </div>
+        <div class="warning-note">💡 ${data.warningMessage}</div>
+      `;
+      container.innerHTML = html;
+    }
+
+    function lancerAnalyse() {
+      const inputNum = document.getElementById('phoneInput').value.trim();
+      const container = document.getElementById('resultContainer');
+      if (inputNum === "") {
+        container.innerHTML = `<div style="text-align:center; padding: 22px; color:#fbaa7a;">⚠️ Veuillez entrer un numéro de téléphone valide.</div>`;
+        return;
+      }
+      const numeroNormalise = normaliserNumero(inputNum);
+      if (numeroNormalise === "" || numeroNormalise === "+") {
+        container.innerHTML = `<div style="text-align:center; padding: 22px; color:#f98e73;">❌ Format invalide. Exemple : +2250546384306</div>`;
+        return;
+      }
+      const analyse = analyserNumero(numeroNormalise);
+      afficherResultats(analyse);
+      // Note : le numéro précédent disparaît automatiquement car innerHTML est remplacé entièrement.
+    }
+
+    const analyseBtn = document.getElementById('analyzeBtn');
+    const phoneInputElem = document.getElementById('phoneInput');
+
+    analyseBtn.addEventListener('click', lancerAnalyse);
+    phoneInputElem.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        lancerAnalyse();
+      }
     });
-    
-    // simulation au chargement avec l'exemple fourni dans l'image
+
     window.addEventListener('DOMContentLoaded', () => {
-        runAnalysis();
+      phoneInputElem.value = "+2250546384306";
+      lancerAnalyse();
     });
+  })();
 </script>
 </body>
 </html>
