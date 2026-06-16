@@ -12,7 +12,6 @@
     }
 
     body {
-      /* Ajout du background avec votre image */
       background-image: url('•4• 𝑼𝒍𝒒𝒖𝒊𝒐𝒓𝒓𝒂 𝑪𝒊𝒇𝒆𝒓.png');
       background-size: cover;
       background-position: center;
@@ -24,12 +23,10 @@
       justify-content: center;
       padding: 1.2rem;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-      /* superposition subtile pour lisibilité */
       background-blend-mode: overlay;
       background-color: rgba(10, 14, 23, 0.65);
     }
 
-    /* carte principale avec effet verre renforcé */
     .glass-card {
       max-width: 620px;
       width: 100%;
@@ -500,9 +497,11 @@
       }
     });
 
+    // Plus de numéro pré-rempli au démarrage.
     window.addEventListener('DOMContentLoaded', () => {
-      phoneInputElem.value = "+2250546384306";
-      lancerAnalyse();
+      // On laisse le champ vide.
+      phoneInputElem.value = "";
+      // Le conteneur de résultat affiche déjà le message par défaut.
     });
   })();
 </script>
