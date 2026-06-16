@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>WA Business Analyse Pro | Indice de solidité</title>
+  <title>Les Fiables Analyse Pro | Indice de solidité</title>
   <style>
     * {
       margin: 0;
@@ -12,22 +12,30 @@
     }
 
     body {
-      background: radial-gradient(circle at 20% 10%, #1a1f2e, #0b0e14);
+      /* Ajout du background avec votre image */
+      background-image: url('•4• 𝑼𝒍𝒒𝒖𝒊𝒐𝒓𝒓𝒂 𝑪𝒊𝒇𝒆𝒓.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1.2rem;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      /* superposition subtile pour lisibilité */
+      background-blend-mode: overlay;
+      background-color: rgba(10, 14, 23, 0.65);
     }
 
-    /* carte principale avec effet verre & néon subtil */
+    /* carte principale avec effet verre renforcé */
     .glass-card {
       max-width: 620px;
       width: 100%;
-      background: rgba(14, 19, 31, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(14, 19, 31, 0.75);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border-radius: 2.8rem;
       border: 1px solid rgba(74, 222, 128, 0.3);
       box-shadow: 0 35px 55px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(74, 222, 128, 0.15), 0 0 25px rgba(74, 222, 128, 0.08);
@@ -133,7 +141,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
-    /* panneau résultats */
     .result-panel {
       background: rgba(3, 7, 15, 0.75);
       backdrop-filter: blur(8px);
@@ -294,7 +301,7 @@
 <div class="glass-card">
   <div class="brand">
     <h1>
-      📊 WA Business
+      📊 Les Fiables
       <span class="badge-pro">analyse pro</span>
     </h1>
     <div style="opacity:0.8; filter: drop-shadow(0 0 6px #4ade80);">🔍</div>
@@ -324,7 +331,6 @@
 
 <script>
   (function() {
-    // normalisation avancée du numéro
     function normaliserNumero(raw) {
       let cleaned = raw.trim().replace(/\s+/g, '');
       if (cleaned === "") return "";
@@ -481,7 +487,6 @@
       }
       const analyse = analyserNumero(numeroNormalise);
       afficherResultats(analyse);
-      // Note : le numéro précédent disparaît automatiquement car innerHTML est remplacé entièrement.
     }
 
     const analyseBtn = document.getElementById('analyzeBtn');
